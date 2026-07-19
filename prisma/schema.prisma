@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum Gender {
+  BOY
+  GIRL
+  BOTH
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  mobile        String?   @unique
+  role          Role      @default(USER)
+  
+  // OTP Reset
+  resetPasswordOTP        String?
+  resetPasswordOTPExpires DateTime?
+  
+  // Relations
+  biodatas      Biodata[]
+  orders        Order[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Biodata {
+  id            String   @id @default(cuid())
+  userId        String?
+  email         String?
+  mobile        String?
+  title         String
+  data          Json
+  template      String
+  language      String
+  isDraft       Boolean  @default(false)
+  downloadCount Int      @default(0)
+  
+  // Link to checkout order
+  orderId       String?  @unique
+  order         Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  // Share Feature
+  shareSlug     String?  @unique
+  isPublic      Boolean  @default(false)
+  
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  templateId  String   @unique // e.g. 'trad_maroon'
+  name        String
+  image       String   // Default image
+  category    String   @default("Traditional")
+  gender      Gender   @default(BOTH)
+  community   String   @default("All")
+  
+  isActive    Boolean  @default(true)
+  isViewHomePage Boolean @default(true)
+  isFree      Boolean  @default(false)
+  order       Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive, isViewHomePage, order, isFree])
+}
+
+model Blog {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  content         String   @db.Text
+  excerpt         String?  @db.Text
+  featuredImage   String?
+  isPublished     Boolean  @default(false)
+  author          String?  @default("Admin")
+  
+  // SEO Fields
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  userId            String?
+  email             String?
+  mobile            String?
+  packageId         String?
+  amount            Float
+  status            OrderStatus @default(PENDING)
+  
+  // Razorpay Specific
+  razorpayOrderId   String?     @unique
+  razorpayPaymentId String?     @unique
+  razorpaySignature String?
+
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  biodata Biodata?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
