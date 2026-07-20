@@ -1,0 +1,22 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    - cron: "0 0 */3 * *"
+
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Keep Alive Endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -n "$CRON_SECRET" ]; then
+            curl -fsSL -H "Authorization: Bearer $CRON_SECRET" https://mywedprofile.com/api/keep-alive
+          else
+            curl -fsSL https://mywedprofile.com/api/keep-alive
+          fi
