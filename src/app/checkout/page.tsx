@@ -173,7 +173,7 @@ function CheckoutContent() {
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div className="flex items-center gap-6">
-          <Link href="/pricing" className="group w-12 h-12 rounded-2xl bg-white border border-zinc-100 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all shadow-sm">
+          <Link href="/" className="group w-12 h-12 rounded-2xl bg-white border border-zinc-100 flex items-center justify-center hover:bg-zinc-900 hover:text-white transition-all shadow-sm">
             <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
