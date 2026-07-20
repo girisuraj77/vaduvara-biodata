@@ -76,80 +76,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ biodata: updatedResults[0], status: "updated" });
     }
 
-    // IF NO ID -> CREATE MODE (Increment usage)
-    const dbTpl = await prisma.template.findUnique({ where: { templateId: template } });
-    const isFreeTemplate = dbTpl ? dbTpl.isFree : (
-      template === "basic_template" ||
-      template === "basic-template" ||
-      template === "simple_leafy" ||
-      template === "simple-leafy"
-    );
-
-    let activePackage = null;
-
-    if (!isFreeTemplate) {
-      // Check for active package and biodata limit only for premium templates
-      activePackage = await prisma.userPackage.findFirst({
-        where: {
-          userId: (session!.user as any).id,
-          isActive: true,
-          endDate: {
-            gt: new Date(),
-          },
-        },
-        orderBy: {
-          startDate: "desc",
-        },
-      });
-
-      if (!activePackage) {
-        return NextResponse.json({ error: "No active plan found. Please upgrade to create biodatas." }, { status: 403 });
-      }
-
-      if (activePackage.biodataUsed >= activePackage.biodataLimit) {
-        return NextResponse.json({ error: "Biodata creation limit reached. Please upgrade your plan." }, { status: 403 });
-      }
-    }
-
     const bioId = `bio_${Date.now()}`;
 
-    // If it's a free template, just insert the record directly without package transaction.
-    // If it's premium, run in transaction and increment biodataUsed count.
-    if (isFreeTemplate) {
-      try {
-        await prisma.$executeRaw`
-          INSERT INTO "Biodata" ("id", "userId", "language", "title", "data", "template", "createdAt", "updatedAt")
-          VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
-        `;
-      } catch (e) {
-        await prisma.$executeRaw`
-          INSERT INTO biodata (id, userid, language, title, data, template, createdat, updatedat)
-          VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
-        `;
-      }
-    } else {
-      await prisma.$transaction([
-        prisma.$executeRaw`
-          INSERT INTO "Biodata" ("id", "userId", "language", "title", "data", "template", "createdAt", "updatedAt")
-          VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
-        `.catch(async () => {
-          return await prisma.$executeRaw`
-            INSERT INTO biodata (id, userid, language, title, data, template, createdat, updatedat)
-            VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
-          `;
-        }),
-        prisma.$executeRaw`
-          UPDATE "UserPackage"
-          SET "biodataUsed" = "biodataUsed" + 1
-          WHERE "id" = ${activePackage!.id}
-        `.catch(async () => {
-          return await prisma.$executeRaw`
-            UPDATE userpackage
-            SET biodataused = biodataused + 1
-            WHERE id = ${activePackage!.id}
-          `;
-        })
-      ] as any);
+    try {
+      await prisma.$executeRaw`
+        INSERT INTO "Biodata" ("id", "userId", "language", "title", "data", "template", "createdAt", "updatedAt")
+        VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
+      `;
+    } catch (e) {
+      await prisma.$executeRaw`
+        INSERT INTO biodata (id, userid, language, title, data, template, createdat, updatedat)
+        VALUES (${bioId}, ${(session!.user as any).id}, ${language}, ${title}, ${data}, ${template}, ${new Date()}, ${new Date()})
+      `;
     }
 
     const createdBioResults = (await prisma.$queryRaw`

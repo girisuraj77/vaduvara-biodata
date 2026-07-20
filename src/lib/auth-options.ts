@@ -43,6 +43,10 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
 
+        if (user.role !== "ADMIN") {
+          throw new Error("Access denied. Only admin users can log in.");
+        }
+
         return user;
       },
     }),

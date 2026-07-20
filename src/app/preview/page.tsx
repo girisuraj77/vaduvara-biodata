@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { PreviewStep } from "@/components/builder/preview-step";
-import { Loader2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useBuilderStore } from "@/store/builder-store";
 
-export default function PreviewPage() {
+function PreviewContent() {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
@@ -76,5 +76,20 @@ export default function PreviewPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function PreviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="fixed inset-0 bg-white flex flex-col items-center justify-center gap-6">
+        <div className="relative">
+          <div className="w-20 h-20 border-4 border-primary/10 border-t-primary rounded-full animate-spin" />
+          <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary animate-pulse" size={32} />
+        </div>
+      </div>
+    }>
+      <PreviewContent />
+    </Suspense>
   );
 }
