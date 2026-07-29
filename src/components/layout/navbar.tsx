@@ -78,8 +78,9 @@ export function Navbar() {
 
       {/* Main Navbar - Sticky White */}
       <header className="sticky top-0 z-[100] w-full bg-white border-b border-zinc-100 shadow-sm transition-all">
-        <div className="container mx-auto px-4 md:px-8 flex h-20 items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4 md:px-8 flex h-20 items-center justify-between">
           <Logo />
+
 
           <nav className="hidden xl:flex gap-8 text-[16px] font-bold tracking-tight text-zinc-600 items-center h-full">
             <Link href="/" className={cn("hover:text-primary transition-all duration-300 cursor-pointer relative py-2 group", isActive("/") && "text-primary")}>

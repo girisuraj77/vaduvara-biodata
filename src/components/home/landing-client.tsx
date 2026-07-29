@@ -57,7 +57,7 @@ export function LandingClient({ initialTemplates }: LandingClientProps) {
   return (
     <main className="flex-1">
       {/* Hero Section */}
-      <section id="hero-section" className="relative overflow-hidden pt-24 pb-28 bg-gradient-to-b from-white via-zinc-50/30 to-white">
+      <section id="hero-section" className="relative overflow-hidden pt-6 sm:pt-24 pb-12 sm:pb-28 bg-gradient-to-b from-white via-zinc-50/30 to-white">
         {/* Subtle, premium gold & chocolate background glows */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-[#CFA132]/10 via-transparent to-transparent blur-[140px] rounded-full pointer-events-none -z-10" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#430917]/5 via-transparent to-transparent blur-[120px] rounded-full pointer-events-none -z-10" />
@@ -65,8 +65,9 @@ export function LandingClient({ initialTemplates }: LandingClientProps) {
         {/* Subtle dot pattern */}
         <div className="absolute inset-0 bg-[radial-gradient(#8080800b_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none -z-20" />
 
-        <div className="container mx-auto px-4 md:px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="container mx-auto px-4 md:px-8 relative z-10 grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
           <div className="max-w-2xl text-left animate-in fade-in slide-in-from-left-8 duration-700 order-2 lg:order-1">
+
             {/* Trust Badge Banner */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-sm">
               <Sparkles size={12} className="text-[#CFA132] animate-pulse" /> Loved by 4,000+ brides & grooms this month

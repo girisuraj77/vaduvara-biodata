@@ -59,6 +59,7 @@ export const metadata: Metadata = {
 
 
 import { Providers } from "@/components/providers";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 
 export default function RootLayout({
   children,
@@ -74,6 +75,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-grow">{children}</main>
           <Footer />
+          <WhatsAppButton />
         </Providers>
 
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
@@ -81,3 +83,4 @@ export default function RootLayout({
     </html>
   );
 }
+

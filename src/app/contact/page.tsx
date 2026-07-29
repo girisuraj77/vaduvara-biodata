@@ -6,16 +6,41 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message.");
+      }
+
       setIsSent(true);
-    }, 1500);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (err: any) {
+      setErrorMessage(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -121,6 +146,8 @@ export default function ContactPage() {
                             required
                             type="text"
                             placeholder="Your Name"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             className="w-full h-16 px-8 rounded-2xl bg-zinc-50 border-2 border-[#d0d0d0] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all outline-none text-zinc-900 font-bold placeholder:text-zinc-300"
                           />
                         </div>
@@ -130,6 +157,8 @@ export default function ContactPage() {
                             required
                             type="email"
                             placeholder="hello@example.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             className="w-full h-16 px-8 rounded-2xl bg-zinc-50 border-2 border-[#d0d0d0] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all outline-none text-zinc-900 font-bold placeholder:text-zinc-300"
                           />
                         </div>
@@ -141,6 +170,8 @@ export default function ContactPage() {
                           required
                           type="text"
                           placeholder="How can we help?"
+                          value={formData.subject}
+                          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                           className="w-full h-16 px-8 rounded-2xl bg-zinc-50 border-2 border-[#d0d0d0] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all outline-none text-zinc-900 font-bold placeholder:text-zinc-300"
                         />
                       </div>
@@ -151,10 +182,18 @@ export default function ContactPage() {
                           required
                           placeholder="Tell us how we can help you today..."
                           rows={6}
+                          value={formData.message}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                           className="w-full px-8 py-6 rounded-3xl bg-zinc-50 border-2 border-[#d0d0d0] focus:border-primary/20 focus:bg-white focus:ring-0
                              transition-all outline-none text-zinc-900 font-bold placeholder:text-zinc-300 resize-none"
                         />
                       </div>
+
+                      {errorMessage && (
+                        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-600 text-sm font-semibold">
+                          ⚠️ {errorMessage}
+                        </div>
+                      )}
 
                       <Button
                         disabled={isSubmitting}
@@ -171,6 +210,7 @@ export default function ContactPage() {
                     </motion.form>
                   )}
                 </AnimatePresence>
+
               </div>
             </div>
           </div>

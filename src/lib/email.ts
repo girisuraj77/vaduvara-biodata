@@ -59,14 +59,103 @@ export async function sendOTPEmail(email: string, otp: string) {
   try {
     return await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error("SMTP Error Diagnostics:", {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_SECURE,
-      user: process.env.SMTP_USER,
-      from: fromEmail,
-      error: error instanceof Error ? error.message : error
-    });
+    logSmtpError("otp", fromEmail, error);
     throw error;
   }
 }
+
+export interface ContactPayload {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function logSmtpError(context: string, fromEmail: string, error: unknown) {
+  console.error(`SMTP Error Diagnostics (${context}):`, {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE,
+    user: process.env.SMTP_USER,
+    from: fromEmail,
+    error: error instanceof Error ? error.message : error,
+  });
+}
+
+export async function sendContactEmail(payload: ContactPayload) {
+  const fromEmail =
+    process.env.SMTP_FROM ||
+    (process.env.SMTP_USER
+      ? `"Marriage Biodata" <${process.env.SMTP_USER}>`
+      : '"Marriage Biodata" <noreply@vadhuvarbiodata.com>');
+  const toEmail = process.env.CONTACT_EMAIL || "girisuraj9739@gmail.com";
+
+  // Check if SMTP is configured
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("⚠️ SMTP is not fully configured. Email sending skipped.");
+    console.log("Contact email payload:", payload);
+
+    if (process.env.NODE_ENV === "development") {
+      return { messageId: "dev-mode-mock-id", accepted: [toEmail], rejected: [] };
+    }
+
+    throw new Error("Email service is not configured.");
+  }
+
+  const safeName = escapeHtml(payload.name);
+  const safeEmail = escapeHtml(payload.email);
+  const safeSubject = escapeHtml(payload.subject);
+  const safeMessage = escapeHtml(payload.message);
+
+  const textBody = [
+    "New contact form message",
+    "",
+    `Name: ${payload.name}`,
+    `Email: ${payload.email}`,
+    `Subject: ${payload.subject}`,
+    "",
+    payload.message,
+  ].join("\n");
+
+  const mailOptions = {
+    from: fromEmail,
+    to: toEmail,
+    replyTo: `"${payload.name.replace(/"/g, "")}" <${payload.email}>`,
+    subject: `[Contact] ${payload.subject}`,
+    text: textBody,
+    html: `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 10px;">
+        <h2 style="color: #E11D48;">New Contact Form Message</h2>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+        <p style="white-space: pre-wrap;">${safeMessage}</p>
+      </div>
+    `,
+  };
+
+  try {
+    const result = await transporter.sendMail(mailOptions);
+    console.log("Contact email accepted by SMTP:", {
+      messageId: result.messageId,
+      to: toEmail,
+      accepted: result.accepted,
+      rejected: result.rejected,
+    });
+    return result;
+  } catch (error) {
+    logSmtpError("contact", fromEmail, error);
+    throw error;
+  }
+}
+
