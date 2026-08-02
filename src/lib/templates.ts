@@ -49,6 +49,12 @@ export const TEMPLATE_COMPONENTS: Record<string, React.ComponentType<any>> = {
   "royal-peacock": dynamic(() => import("@/components/templates/royal-peacock").then(m => m.RoyalPeacock), { loading: TemplateLoader, ssr: false }),
   "temple_lotus": dynamic(() => import("@/components/templates/temple-lotus").then(m => m.TempleLotus), { loading: TemplateLoader, ssr: false }),
   "temple-lotus": dynamic(() => import("@/components/templates/temple-lotus").then(m => m.TempleLotus), { loading: TemplateLoader, ssr: false }),
+  "regal_gold_frame": dynamic(() => import("@/components/templates/regal-gold-frame").then(m => m.RegalGoldFrame), { loading: TemplateLoader, ssr: false }),
+  "regal-gold-frame": dynamic(() => import("@/components/templates/regal-gold-frame").then(m => m.RegalGoldFrame), { loading: TemplateLoader, ssr: false }),
+  "royal_teal_gold": dynamic(() => import("@/components/templates/royal-teal-gold").then(m => m.RoyalTealGold), { loading: TemplateLoader, ssr: false }),
+  "royal-teal-gold": dynamic(() => import("@/components/templates/royal-teal-gold").then(m => m.RoyalTealGold), { loading: TemplateLoader, ssr: false }),
+  "traditional_marathi": dynamic(() => import("@/components/templates/traditional-marathi").then(m => m.TraditionalMarathiTemplate || m.MaroonGoldGanesh || m.ClassicIvoryMaroon || m.MinimalistCornerBorderTemplate || m.default), { loading: TemplateLoader, ssr: false }),
+  "traditional-marathi": dynamic(() => import("@/components/templates/traditional-marathi").then(m => m.TraditionalMarathiTemplate || m.MaroonGoldGanesh || m.ClassicIvoryMaroon || m.MinimalistCornerBorderTemplate || m.default), { loading: TemplateLoader, ssr: false }),
 
   // ── Muslim Templates ──
   "emerald_paradise": dynamic(() => import("@/components/templates/emerald-paradise").then(m => m.EmeraldParadise), { loading: TemplateLoader, ssr: false }),

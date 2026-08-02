@@ -64,6 +64,9 @@ export async function POST(request: Request) {
         'marigold-garden': 'Hindu', 'marigold_garden': 'Hindu',
         'royal-peacock': 'Hindu', 'royal_peacock': 'Hindu',
         'temple-lotus': 'Hindu', 'temple_lotus': 'Hindu',
+        'regal-gold-frame': 'Hindu', 'regal_gold_frame': 'Hindu',
+        'royal-teal-gold': 'Hindu', 'royal_teal_gold': 'Hindu',
+        'traditional-marathi': 'Hindu', 'traditional_marathi': 'Hindu',
       };
 
       const defaultCommunity = communityMap[templateId.toLowerCase()] || 'Hindu';
