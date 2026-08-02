@@ -256,7 +256,7 @@ export function TemplateCard({ templateId, name, image, data, className, isFree 
         )}
       >
         {/* Preview Area */}
-        <div className="aspect-[3/4] relative bg-white p-[10px] overflow-hidden">
+        <div className="aspect-[794/1123] relative bg-white p-[10px] overflow-hidden">
           <div className="relative w-full h-full overflow-hidden rounded-lg bg-zinc-50 flex items-center justify-center">
             {isMounted && TEMPLATE_COMPONENTS[templateId] ? (
               <div

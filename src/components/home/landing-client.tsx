@@ -173,7 +173,7 @@ export function LandingClient({ initialTemplates }: LandingClientProps) {
               </div>
             ))}
             {displayedTemplates.length === 0 && [...Array(10)].map((_, i) => (
-              <div key={i} className="snap-center shrink-0 w-[160px] sm:w-auto aspect-[3/4] bg-zinc-200/60 animate-pulse rounded-2xl border border-zinc-100" />
+              <div key={i} className="snap-center shrink-0 w-[160px] sm:w-auto aspect-[794/1123] bg-zinc-200/60 animate-pulse rounded-2xl border border-zinc-100" />
             ))}
           </div>
 
