@@ -97,7 +97,7 @@ export function MaroonGoldGanesh({ data: externalData }: { data?: any }) {
     >
       {/* Inner cream card with thin gold border and dotted texture */}
       <div
-        className="relative w-full flex-1 flex flex-col px-12 pt-8 pb-12"
+        className="relative w-full flex-1 flex flex-col pl-20 pr-12 pt-8 pb-12"
         style={{
           backgroundColor: colors.bg,
           border: `2px solid ${colors.gold}`,

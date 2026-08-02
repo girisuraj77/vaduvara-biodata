@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { TemplatesClient } from "@/components/templates/templates-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Highly targeted SEO configuration for the Templates Catalog Page
 export const metadata: Metadata = {
   title: "Free Marriage Biodata Templates - Choose Beautiful Matrimonial Layouts",

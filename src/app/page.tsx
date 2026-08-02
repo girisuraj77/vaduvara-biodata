@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { LandingClient } from "@/components/home/landing-client";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Perfect, high-performance SEO configuration for Google, Bing, and Social shares
 export const metadata: Metadata = {
   title: "Free Marriage Biodata Maker - Create Matrimonial Profiles Online",

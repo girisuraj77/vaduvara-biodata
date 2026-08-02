@@ -163,11 +163,11 @@ export function RegalGoldFrame({ data: externalData }: { data?: any }) {
       {!isBlankDesign && (
         <div className="relative z-10 flex flex-col flex-1 px-4 pt-4">
           {/* Header Section: Left BIODATA | Center Ganesha | Right Shloka */}
-          <div className="grid grid-cols-3 items-center mb-8 pb-4">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center mb-8 pb-4 border-b border-[#AD8712]/30 gap-4">
             {/* Left: BIODATA Title */}
-            <div className="text-left">
+            <div className="text-right">
               <h1
-                className="text-[26px] font-black tracking-widest uppercase"
+                className="text-[24px] font-black tracking-widest uppercase whitespace-nowrap"
                 style={{ color: colors.brownText, fontFamily: "Georgia, serif" }}
               >
                 {biodataTitle || "BIODATA"}
@@ -175,10 +175,10 @@ export function RegalGoldFrame({ data: externalData }: { data?: any }) {
             </div>
 
             {/* Center: Lord Ganesha Image */}
-            <div className="flex justify-center">
+            <div className="flex justify-center px-2 shrink-0">
               <img
                 src={`/images/gods/${godPhotoId || "god-1"}.png`}
-                className="h-16 w-16 object-contain drop-shadow-sm"
+                className="h-12 w-12 object-contain drop-shadow-sm"
                 alt="Lord Ganesha"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = "none";
@@ -187,9 +187,9 @@ export function RegalGoldFrame({ data: externalData }: { data?: any }) {
             </div>
 
             {/* Right: Sanskrit Ganesha Shloka */}
-            <div className="text-right">
+            <div className="text-left">
               <p
-                className="text-[22px] font-bold tracking-wide"
+                className="text-[18px] font-bold tracking-wide whitespace-nowrap"
                 style={{ color: colors.brownText, fontFamily: "'Noto Sans Devanagari', 'Segoe UI', serif" }}
               >
                 {shloka || "॥ श्री गणेशाय नमः ॥"}

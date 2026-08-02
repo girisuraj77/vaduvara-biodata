@@ -16,11 +16,8 @@ export async function GET(req: NextRequest) {
       ${whereClause}
       ORDER BY "order" ASC
     `);
-    return NextResponse.json(templates, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-      },
-    });
+
+    return NextResponse.json(templates);
   } catch (error: any) {
     console.error("Templates API Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -49,7 +49,7 @@ export function RoyalTealGold({ data: externalData }: { data?: any }) {
   return (
     <div
       id="biodata-template"
-      className="w-[794px] min-h-[1123px] h-auto relative overflow-hidden flex flex-col px-14 pt-10 pb-14 shrink-0 shadow-2xl"
+      className="w-[794px] min-h-[1123px] h-auto relative overflow-hidden flex flex-col pl-24 pr-14 pt-10 pb-14 shrink-0 shadow-2xl"
       style={{
         backgroundColor: colors.bg,
         color: colors.valueText,
